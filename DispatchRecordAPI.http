@@ -1,0 +1,6 @@
+@DispatchRecordAPI_HostAddress = http://localhost:5262
+
+GET {{DispatchRecordAPI_HostAddress}}/dispatchrecord/
+Accept: application/json
+
+###

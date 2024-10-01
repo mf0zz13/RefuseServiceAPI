@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35309.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DispatchRecordAPI", "DispatchRecordAPI.csproj", "{A323CCF2-D289-4B81-96D2-CD3E435663D0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A323CCF2-D289-4B81-96D2-CD3E435663D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A323CCF2-D289-4B81-96D2-CD3E435663D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A323CCF2-D289-4B81-96D2-CD3E435663D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A323CCF2-D289-4B81-96D2-CD3E435663D0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5F91A480-335E-416D-A0F2-293233E95F2B}
+	EndGlobalSection
+EndGlobal

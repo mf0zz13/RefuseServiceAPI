@@ -9,9 +9,6 @@ namespace DispatchRecordAPI.Controllers
     [Route("[controller]")]
     public class DispatchRecordController : ControllerBase
     {
-        private MySqlConnection connection;
-           
-
         [HttpGet]
         //[Route("AllDispatchRecords")]
         public List<DispatchRecord> GetAllDispatchRecords()
@@ -25,7 +22,7 @@ namespace DispatchRecordAPI.Controllers
                 SslMode = MySqlSslMode.Required,
             };
 
-            connection = new MySqlConnection(builder.ConnectionString);
+            var connection = new MySqlConnection(builder.ConnectionString);
 
             connection.Open();
 

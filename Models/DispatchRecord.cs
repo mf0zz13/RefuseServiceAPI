@@ -2,13 +2,13 @@
 {
     public class DispatchRecord
     {
-        public  DateTime Date { get; set; }
-        public  string ServiceArea { get; set; }
-        public  string Route { get; set; }
-        public  string TruckNumber { get; set; }
-        public  string Driver { get; set; }
-        public  string HelperOne { get; set; }
-        public string HelperTwo { get; set; }
-        public  string RefuseType { get; set; }
+        public required DateTime Date { get; set; }
+        public required string ServiceArea { get; set; }
+        public required string Route { get; set; }
+        public required string TruckNumber { get; set; }
+        public required string Driver { get; set; }
+        public required string HelperOne { get; set; }
+        public string? HelperTwo { get; set; }
+        public required string RefuseType { get; set; }
     }
 }

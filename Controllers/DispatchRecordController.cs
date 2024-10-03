@@ -11,16 +11,20 @@ namespace DispatchRecordAPI.Controllers
     public class DispatchRecordController : ControllerBase
     {
         private MySqlConnection connection;
+        private IConfiguration config;
+        private string password;
 
         public DispatchRecordController(IConfiguration configuration)
         {
+            config = configuration;
+            //password = config["Database:Password"];
             var password = configuration["Database:Password"];
             var builder = new MySqlConnectionStringBuilder
             {
                 Server = "mysqlmssa.mysql.database.azure.com",
                 Database = "guntherrefuse",
                 UserID = "applogin",
-                Password = password,
+                Password = "T3stP@ssw0rd",
                 SslMode = MySqlSslMode.Required,
             };
 
@@ -29,13 +33,12 @@ namespace DispatchRecordAPI.Controllers
 
         [HttpGet]
         [Route("AllDispatchRecords")]
-        public List<DispatchRecord> GetAllDispatchRecords()
+        public async Task<List<DispatchRecord>> GetAllDispatchRecordsAsync()
         {
             try
             {
-                connection.Open();
-                return connection.Query<DispatchRecord>("SELECT * FROM DispatchRecords;").ToList();
-
+               await connection.OpenAsync();
+                return (await connection.QueryAsync<DispatchRecord>("SELECT * FROM DispatchRecords;")).ToList<DispatchRecord>();
             }
             catch
             {
@@ -49,16 +52,14 @@ namespace DispatchRecordAPI.Controllers
 
         [HttpGet]
         [Route("AllDispatchRecordsFromToday")]
-        public List<DispatchRecord>? GetDispatchRecordsFromToday()
+        public async Task<List<DispatchRecord>> GetDispatchRecordsFromTodayAsync()
         {
             try
             {
-                connection.Open();
-                return connection.Query<DispatchRecord>($"SELECT * FROM DispatchRecords " +
+                await connection.OpenAsync();
+                return (await connection.QueryAsync<DispatchRecord>($"SELECT * FROM DispatchRecords " +
                                                         $"WHERE DispatchDate = {DateTime.Today.Year}-{DateTime.Today.Month}-{DateTime.Today.Day}"
-                                                        ).ToList();
-
-
+                                                        )).ToList<DispatchRecord>();
             }
             catch
             {

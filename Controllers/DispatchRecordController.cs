@@ -37,7 +37,7 @@ namespace DispatchRecordAPI.Controllers
         {
             try
             {
-               await connection.OpenAsync();
+                await connection.OpenAsync();
                 return (await connection.QueryAsync<DispatchRecord>("SELECT * FROM DispatchRecords;")).ToList<DispatchRecord>();
             }
             catch
@@ -67,7 +67,26 @@ namespace DispatchRecordAPI.Controllers
             }
             finally
             {
-                connection.Close();
+                await connection.CloseAsync();
+            }
+        }
+
+        [HttpGet]
+        [Route("AllTrucks")]
+        public async Task<List<Truck>> GetTrucksAsync()
+        {
+            try
+            {
+                await connection.OpenAsync();
+                return (await connection.QueryAsync<Truck>("SELECT * FROM Trucks")).ToList();
+            }
+            catch
+            {
+                return new List<Truck>();
+            }
+            finally
+            {
+                await connection.CloseAsync();
             }
         }
     }

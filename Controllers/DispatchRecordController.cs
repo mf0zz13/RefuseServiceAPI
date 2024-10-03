@@ -58,7 +58,7 @@ namespace DispatchRecordAPI.Controllers
             {
                 await connection.OpenAsync();
                 return (await connection.QueryAsync<DispatchRecord>($"SELECT * FROM DispatchRecords " +
-                                                        $"WHERE DispatchDate = {DateTime.Today.Year}-{DateTime.Today.Month}-{DateTime.Today.Day}"
+                                                        $"WHERE DispatchDate = '{DateTime.Today.Year}-{DateTime.Today.Month}-{DateTime.Today.Day}'"
                                                         )).ToList<DispatchRecord>();
             }
             catch

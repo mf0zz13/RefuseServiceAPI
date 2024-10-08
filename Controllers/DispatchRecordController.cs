@@ -2,6 +2,7 @@
 using MySqlConnector;
 using Dapper;
 using DispatchRecordAPI.Models;
+using System.Collections.Generic;
 
 namespace DispatchRecordAPI.Controllers
 {
@@ -9,10 +10,15 @@ namespace DispatchRecordAPI.Controllers
     [Route("[controller]")]
     public class DispatchRecordController : ControllerBase
     {
-        [HttpGet]
-        //[Route("AllDispatchRecords")]
-        public List<DispatchRecord> GetAllDispatchRecords()
+        private MySqlConnection connection;
+        private IConfiguration config;
+        private string password;
+
+        public DispatchRecordController(IConfiguration configuration)
         {
+            config = configuration;
+            //password = config["Database:Password"];
+            var password = configuration["Database:Password"];
             var builder = new MySqlConnectionStringBuilder
             {
                 Server = "mysqlmssa.mysql.database.azure.com",
@@ -22,18 +28,66 @@ namespace DispatchRecordAPI.Controllers
                 SslMode = MySqlSslMode.Required,
             };
 
-            var connection = new MySqlConnection(builder.ConnectionString);
-
-            connection.Open();
-
-            return connection.Query<DispatchRecord>("SELECT * FROM DispatchRecords;").ToList();
+            connection = new MySqlConnection(builder.ConnectionString);
         }
 
-        //[HttpGet]
-        //[Route("AllDispatchRecordsFromToday")]
-        //public List<DispatchRecord>? GetDispatchRecordsFromToday()
-        //{
-        //    return connection.Query<DispatchRecord>($"SELECT * FROM DispatchRecords WHERE DispatchDate = {DateTime.Today.Year}-{DateTime.Today.Month}-{DateTime.Today.Day}").ToList();
-        //}
+        [HttpGet]
+        [Route("AllDispatchRecords")]
+        public async Task<List<DispatchRecord>> GetAllDispatchRecordsAsync()
+        {
+            try
+            {
+                await connection.OpenAsync();
+                return (await connection.QueryAsync<DispatchRecord>("SELECT * FROM DispatchRecords;")).ToList<DispatchRecord>();
+            }
+            catch
+            {
+                return new List<DispatchRecord>();
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        [HttpGet]
+        [Route("AllDispatchRecordsFromToday")]
+        public async Task<List<DispatchRecord>> GetDispatchRecordsFromTodayAsync()
+        {
+            try
+            {
+                await connection.OpenAsync();
+                return (await connection.QueryAsync<DispatchRecord>($"SELECT * FROM DispatchRecords " +
+                                                        $"WHERE DispatchDate = '{DateTime.Today.Year}-{DateTime.Today.Month}-{DateTime.Today.Day}'"
+                                                        )).ToList<DispatchRecord>();
+            }
+            catch
+            {
+                return new List<DispatchRecord>();
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+        }
+
+        [HttpGet]
+        [Route("AllTrucks")]
+        public async Task<List<Truck>> GetTrucksAsync()
+        {
+            try
+            {
+                await connection.OpenAsync();
+                return (await connection.QueryAsync<Truck>("SELECT * FROM Trucks")).ToList();
+            }
+            catch
+            {
+                return new List<Truck>();
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+        }
     }
 }

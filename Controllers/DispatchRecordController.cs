@@ -24,7 +24,7 @@ namespace DispatchRecordAPI.Controllers
                 Server = "mysqlmssa.mysql.database.azure.com",
                 Database = "guntherrefuse",
                 UserID = "applogin",
-                Password = "T3stP@ssw0rd",
+                Password = "T3stiesP@ssw0rd",
                 SslMode = MySqlSslMode.Required,
             };
 
@@ -83,6 +83,25 @@ namespace DispatchRecordAPI.Controllers
             catch
             {
                 return new List<Truck>();
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+        }
+
+        [HttpPost]
+        [Route("AddDispatchRecord")]
+        public async Task AddDispatchRecord([FromBody] DispatchRecord record)
+        {  try
+            {
+                await connection.OpenAsync();
+                await connection.ExecuteAsync("INSERT INTO dispatchrecords (DispatchDate, ServiceArea, Route, TruckNumber, Driver, HelperOne, HelperTwo, RefuseType) " +
+                    $"VALUES ('{record.Date.Year}-{record.Date.Month}-{record.Date.Day}', '{record.ServiceArea}', '{record.Route}', '{record.TruckNumber}', '{record.Driver}', '{record.HelperOne}', '{record.HelperTwo}', '{record.RefuseType}');");
+            }
+            catch
+            {
+                throw new NotImplementedException();
             }
             finally
             {

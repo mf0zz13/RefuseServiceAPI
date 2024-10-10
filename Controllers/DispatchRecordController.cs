@@ -14,11 +14,8 @@ namespace DispatchRecordAPI.Controllers
         private IConfiguration config;
         private string password;
 
-        public DispatchRecordController(IConfiguration configuration)
+        public DispatchRecordController()
         {
-            config = configuration;
-            //password = config["Database:Password"];
-            var password = configuration["Database:Password"];
             var builder = new MySqlConnectionStringBuilder
             {
                 Server = "mysqlmssa.mysql.database.azure.com",
@@ -90,6 +87,25 @@ namespace DispatchRecordAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("AllEmployees")]
+        public async Task<List<Employee>> GetEmployeesAsync()
+        {
+            try
+            {
+                await connection.OpenAsync();
+                return (await connection.QueryAsync<Employee>("SELECT * FROM Employees")).ToList();
+            }
+            catch
+            {
+                return new List<Employee>();
+            }
+            finally
+            {
+                await connection.CloseAsync();
+            }
+        }
+
         [HttpPost]
         [Route("AddDispatchRecord")]
         public async Task AddDispatchRecord([FromBody] DispatchRecord record)
@@ -97,7 +113,7 @@ namespace DispatchRecordAPI.Controllers
             {
                 await connection.OpenAsync();
                 await connection.ExecuteAsync("INSERT INTO dispatchrecords (DispatchDate, ServiceArea, Route, TruckNumber, Driver, HelperOne, HelperTwo, RefuseType) " +
-                    $"VALUES ('{record.Date.Year}-{record.Date.Month}-{record.Date.Day}', '{record.ServiceArea}', '{record.Route}', '{record.TruckNumber}', '{record.Driver}', '{record.HelperOne}', '{record.HelperTwo}', '{record.RefuseType}');");
+                    $"VALUES ('{record.DispatchDate.Year}-{record.DispatchDate.Month}-{record.DispatchDate.Day}', '{record.ServiceArea}', '{record.Route}', '{record.TruckNumber}', '{record.Driver}', '{record.HelperOne}', '{record.HelperTwo}', '{record.RefuseType}');");
             }
             catch
             {

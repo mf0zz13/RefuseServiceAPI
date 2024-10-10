@@ -1,5 +1,4 @@
 var builder = WebApplication.CreateBuilder(args);
-var databasePassword = builder.Configuration["Database:Password"];
 
 // Add services to the container.
 
@@ -33,7 +32,5 @@ app.UseAuthorization();
 app.UseCors("AllowSpecificOrigins");
 
 app.MapControllers();
-
-app.MapGet("/", () => databasePassword);
 
 app.Run();

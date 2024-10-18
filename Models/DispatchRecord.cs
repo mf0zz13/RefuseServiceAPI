@@ -1,6 +1,4 @@
-﻿using System.Data.SqlTypes;
-
-namespace DispatchRecordAPI.Models
+﻿namespace DispatchRecordAPI.Models
 {
     public class DispatchRecord
     {
